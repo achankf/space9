@@ -6,6 +6,7 @@ import { Dungeon } from "./Model/Dungeon/Dungeon";
 import { Family } from "./Model/Family";
 import { Game } from "./Model/Game";
 import { Guild } from "./Model/Guild";
+import { LandNode } from "./Model/LandNode";
 import { IdMap } from "./Struct/IdMap";
 import { createRandomName } from "./utils/createRandomName";
 
@@ -21,7 +22,7 @@ export function createGame(): Game {
       characters.put({
         name,
         coor: {
-          type: CoorKind.Wild,
+          type: CoorKind.Planet,
           x: 10,
           y: 10,
         },
@@ -43,11 +44,26 @@ export function createGame(): Game {
 
   const families = new IdMap<Family>();
 
+  const landNodes = Array<LandNode>();
+
+  landNodes.push(
+    new LandNode({
+      name: "Airstrip One",
+      coor: { type: CoorKind.Planet, x: 2, y: 3 },
+      allUsableLand: 10000,
+      population: 1000,
+      farmhouses: new Set(),
+      guildHalls: new Set(),
+      dungeons: new Set(),
+      shops: new Set(),
+    })
+  );
+
   return {
     characters,
     guilds,
     families,
-    landNodes: [],
+    landNodes,
     landmarks: {
       farmhouses: new IdMap<Farmhouse>(),
       guildHalls: new IdMap<GuildHall>(),

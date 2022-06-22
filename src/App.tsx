@@ -1,11 +1,11 @@
 import { GameContextProvider } from "./Context/Game";
 import { ViewContextProvider } from "./Context/View";
-import { Default } from "./View/default";
+import { Router } from "./Router";
 
 export const App: React.FC = () => (
   <ViewContextProvider>
     <GameContextProvider>
-      <Default />
+      <Router />
     </GameContextProvider>
   </ViewContextProvider>
 );

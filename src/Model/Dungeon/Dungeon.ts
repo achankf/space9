@@ -3,13 +3,13 @@ enum DungeonTheme {
 }
 
 export class Dungeon {
-  public constructor(
+  constructor(
     public theme: DungeonTheme,
     public stageSlots: number, // how many "stages" need to face before getting to the final boss
     public floorSize: number // how many encounters per floor
   ) {}
 
-  public get size(): number {
+  get size(): number {
     const { stageSlots, floorSize } = this;
     return stageSlots * floorSize;
   }

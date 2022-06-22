@@ -1,17 +1,17 @@
 export const enum CoorKind {
-  Landmark,
-  Wild,
+  Node,
+  Planet,
 }
 
-export interface WildCoor {
-  type: CoorKind.Wild;
+export interface PlanetCoor {
+  type: CoorKind.Planet;
   x: number;
   y: number;
 }
 
-export interface CityCoor {
-  type: CoorKind.Landmark;
-  cityId: number;
+export interface NodeCoor {
+  type: CoorKind.Node;
+  nodeId: number;
 }
 
-export type Coor = CityCoor | WildCoor;
+export type Coor = NodeCoor | PlanetCoor;

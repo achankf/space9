@@ -1,17 +1,18 @@
 import React, { useContext } from "react";
 
 import { GameContext } from "../Context/Game";
+import { ViewContext } from "../Context/View";
 import { Coor, CoorKind } from "../Model/Coor";
 
 function coorToString(coor: Coor): string {
   switch (coor.type) {
-    case CoorKind.Landmark: {
-      const { cityId } = coor;
-      return `City ${cityId}`;
+    case CoorKind.Node: {
+      const { nodeId } = coor;
+      return `N${nodeId}`;
     }
-    case CoorKind.Wild: {
+    case CoorKind.Planet: {
       const { x, y } = coor;
-      return `Wild (${x},${y})`;
+      return `P(${x},${y})`;
     }
     default:
       throw new Error("Unreachable");
@@ -20,8 +21,10 @@ function coorToString(coor: Coor): string {
 
 export const Default: React.FC = () => {
   const {
-    game: { characters },
+    game: { characters, landNodes },
   } = useContext(GameContext);
+
+  const viewContext = useContext(ViewContext);
 
   return (
     <>
@@ -30,38 +33,29 @@ export const Default: React.FC = () => {
         <table>
           <tr>
             <th>Name</th>
-            <th>City</th>
-            <th>Spaceport</th>
-            <th>Hospitality</th>
-            <th>Transit</th>
-            <th>Welfare</th>
-            <th>Shops</th>
-            <th>Businesses</th>
-            <th>Institution</th>
+            <th>Pop Scale</th>
+            <th>Usable Land (Acre)</th>
+            <th>Market</th>
+            <th>Dungeons</th>
           </tr>
-          <tr>
-            <td>Airstrip One</td>
-            <td>✓</td>
-            <td>✓</td>
-            <td>
-              <button type="button">Go to</button>
-            </td>
-            <td>
-              <button type="button">Go to</button>
-            </td>
-            <td>
-              <button type="button">Go to</button>
-            </td>
-            <td>
-              <button type="button">Go to</button>
-            </td>
-            <td>
-              <button type="button">Go to</button>
-            </td>
-            <td>
-              <button type="button">Go to</button>
-            </td>
-          </tr>
+          {landNodes.map((node) => {
+            const { name, popScale, allUsableLand, hasMarket, hasDungeons } =
+              node;
+
+            return (
+              <tr>
+                <td>{name}</td>
+                <td>{popScale.toFixed(0)}</td>
+                <td>{allUsableLand}</td>
+                <td>
+                  {hasMarket ? <button type="button">Go to</button> : "✗"}
+                </td>
+                <td>
+                  {hasDungeons ? <button type="button">Go to</button> : "✗"}
+                </td>
+              </tr>
+            );
+          })}
         </table>
       </div>
       <div className="App">

@@ -5,38 +5,33 @@ export enum ViewKind {
   Node,
 }
 
-export interface DefaultView {
-  type: ViewKind.Default;
+export class DefaultView {
+  type = ViewKind.Default;
 }
 
-export interface NodeView {
-  type: ViewKind.Node;
-}
-
-export type View = DefaultView | NodeView;
+export type View = DefaultView;
 
 export class ViewContextData {
   #viewStack: View[] = [];
 
-  public get getCurrentView(): View {
-    const view = this.#viewStack.at(-1);
-
-    if (!view) {
-      return { type: ViewKind.Default };
-    }
-    return view;
+  get currentView(): View {
+    return this.#viewStack.at(-1) ?? new DefaultView();
   }
 
-  public pushView(view: View): void {
+  pushView(view: View): void {
     this.#viewStack.push(view);
   }
 
-  public popView(): void {
+  popView(): void {
     if (this.#viewStack.length === 0) {
       throw new Error("Unreachable - cannot pop an empty view stack");
     }
 
     this.#viewStack.pop();
+  }
+
+  clearViews(): void {
+    this.#viewStack.length = 0;
   }
 }
 
