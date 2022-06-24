@@ -45,3 +45,4 @@ rules:
   "max-classes-per-file": "off"
   "import/prefer-default-export": "off"
   "import/no-default-export": "error"
+  "jsx-a11y/control-has-associated-label": "off"

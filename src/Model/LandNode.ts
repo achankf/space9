@@ -4,6 +4,8 @@ import { PlanetCoor } from "./Coor";
 export interface LandNodeData {
   name: string;
   allUsableLand: number;
+  claimedLand: number;
+  usedLand: number;
   population: number;
   farmhouses: Set<number>;
   guildHalls: Set<number>;
@@ -29,5 +31,25 @@ export class LandNode extends BaseClass {
 
   get hasDungeons(): boolean {
     return this.dungeons.size > 0;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get hasWelfare(): boolean {
+    return false; // TODO
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get hasServices(): boolean {
+    return false; // TODO
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get hasResidence(): boolean {
+    return false; // TODO
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get hasInstitution(): boolean {
+    return false; // TODO
   }
 }
