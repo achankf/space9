@@ -20,7 +20,7 @@ export function coorToString(coor: Coor): string {
   switch (coor.type) {
     case CoorKind.Node: {
       const { nodeId } = coor;
-      return `N${nodeId}`;
+      return `N-${nodeId}`;
     }
     case CoorKind.Planet: {
       const { x, y } = coor;

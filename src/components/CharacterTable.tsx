@@ -1,12 +1,15 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 
 import { GameContext } from "../Context/Game";
+import { ViewContext, ViewKind } from "../Context/View";
 import { coorToString } from "../Model/Coor";
 
 export const CharacterTable: React.FC = () => {
   const {
     game: { characters },
   } = useContext(GameContext);
+
+  const { pushView } = useContext(ViewContext);
 
   return (
     <table>
@@ -36,8 +39,13 @@ export const CharacterTable: React.FC = () => {
           const attrSum = intelligence + mana + physique + social + luck;
 
           return (
-            // eslint-disable-next-line react/no-array-index-key
-            <tr key={id}>
+            <tr
+              className="clickable"
+              key={id}
+              onClick={(): void =>
+                pushView({ type: ViewKind.Character, characterId: id })
+              }
+            >
               <td>{id}</td>
               <td>{name}</td>
               <td>{actionCapacity}</td>

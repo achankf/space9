@@ -1,4 +1,4 @@
-export class GuildHall {
+export class Shop {
   constructor(
     public scale: number,
     public furnishing: number,
@@ -6,8 +6,8 @@ export class GuildHall {
     public customers: Set<number>
   ) {}
 
-  static default(): GuildHall {
-    return new GuildHall(1, 0, new Set(), new Set());
+  static default(): Shop {
+    return new Shop(1, 0, new Set(), new Set());
   }
 
   calAttractiveness(): number {

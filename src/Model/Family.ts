@@ -1,5 +1,7 @@
+import { Id } from "../Id";
+
 export interface Family {
-  parent1: number;
-  parent2: number;
-  children: Set<number>;
+  head: Id;
+  partners: Set<Id>;
+  children: Set<Id>;
 }

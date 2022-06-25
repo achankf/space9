@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  user-select: none;
 }
 
 code {
@@ -15,6 +16,14 @@ code {
 table {
   border-collapse: collapse;
   border: 1px solid black;
+}
+
+tr:hover.clickable {
+  background-color: antiquewhite;
+}
+
+tr:active.clickable {
+  background-color: aliceblue;
 }
 
 th {

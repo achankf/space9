@@ -1,3 +1,4 @@
+import { Id } from "../Id";
 import { Coor } from "./Coor";
 
 export interface CharacterAttributes {
@@ -17,4 +18,5 @@ export interface Character {
   };
   actionCapacity: number;
   stress: number;
+  familyId: Id;
 }

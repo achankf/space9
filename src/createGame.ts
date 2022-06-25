@@ -1,52 +1,84 @@
 import random from "lodash/random";
 
+import { Id } from "./Id";
+import { Address } from "./Model/Address";
 import { Farmhouse } from "./Model/Buildings/Farmhouse";
 import { GuildHall } from "./Model/Buildings/GuildHall";
+import { Residence, ResidenceKind } from "./Model/Buildings/Residence";
 import { Character } from "./Model/Character";
 import { CoorKind } from "./Model/Coor";
 import { Dungeon } from "./Model/Dungeon/Dungeon";
+import { Faction } from "./Model/Faction";
 import { Family } from "./Model/Family";
 import { Game } from "./Model/Game";
 import { Guild } from "./Model/Guild";
 import { LandNode } from "./Model/LandNode";
 import { IdMap } from "./Struct/IdMap";
-import { createRandomName } from "./utils/createRandomName";
+import { createUniqueNames } from "./utils/createUniqueName";
 
 export function createGame(): Game {
   const characters = new IdMap<Character>();
-  const distinctNames = new Set();
-  while (characters.size < 10) {
-    const name = createRandomName();
+  const families = new IdMap<Family>();
+  const landNodes = [];
+  const residences = Array<Residence>();
+  const addresses = new Map<Id, Address>();
+  const factions = new IdMap<Faction>();
 
-    if (!distinctNames.has(name)) {
-      distinctNames.add(name);
+  const { id: faction1, set: setFaction } = factions.reserve();
 
-      characters.put({
-        name,
-        coor: {
-          type: CoorKind.Planet,
-          x: 10,
-          y: 10,
-        },
-        attr: {
-          physique: 5,
-          intelligence: 5,
-          mana: 5,
-          social: 5,
-          luck: 5,
-        },
-        actionCapacity: 3,
-        education: { literacy: 10 },
-        stress: 0,
-      });
-    }
-  }
+  const names = createUniqueNames(10);
+
+  const nodeId = landNodes.length;
+
+  names.forEach((name) => {
+    const { id: characterId, set: setCharacter } = characters.reserve();
+    const { id: familyId, set: setFamily } = families.reserve();
+
+    setCharacter({
+      name,
+      coor: {
+        type: CoorKind.Node,
+        nodeId,
+      },
+      attr: {
+        physique: 5,
+        intelligence: 5,
+        mana: 5,
+        social: 5,
+        luck: 5,
+      },
+      actionCapacity: 3,
+      education: { literacy: 10 },
+      stress: 0,
+      familyId,
+    });
+
+    setFamily({
+      head: characterId,
+      partners: new Set(),
+      children: new Set(),
+    });
+
+    const residenceId = residences.length;
+    const unitId = 0;
+
+    const type = ResidenceKind.Shack;
+
+    residences.push({
+      name: `${name}'s ${ResidenceKind[type]}`,
+      type,
+      owner: characterId,
+      families: new Set([familyId]),
+    });
+
+    addresses.set(familyId, {
+      nodeId,
+      residenceId,
+      unitId,
+    });
+  });
 
   const guilds = new IdMap<Guild>();
-
-  const families = new IdMap<Family>();
-
-  const landNodes = Array<LandNode>();
 
   landNodes.push(
     new LandNode({
@@ -56,14 +88,16 @@ export function createGame(): Game {
       claimedLand: 1000,
       usedLand: 1000,
       population: 1000,
-      farmhouses: new Set(),
-      guildHalls: new Set(),
-      dungeons: new Set(),
-      shops: new Set(),
+      farmhouses: [],
+      guildHalls: [],
+      dungeons: [],
+      shops: [],
+      residences,
     })
   );
 
-  return {
+  return new Game({
+    addresses,
     characters,
     guilds,
     families,
@@ -73,5 +107,7 @@ export function createGame(): Game {
       guildHalls: new IdMap<GuildHall>(),
       dungeons: new IdMap<Dungeon>(),
     },
-  };
+    factions,
+    playerId: 0,
+  });
 }

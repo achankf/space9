@@ -1,8 +1,10 @@
 import { useContext } from "react";
 
 import { ViewContext, ViewKind } from "./Context/View";
+import { Character } from "./View/Character/Character";
 import { Default } from "./View/Default";
-import { Residence } from "./View/Node/Residence";
+import { Empty } from "./View/Node/Empty";
+import { ResidenceView } from "./View/Node/Residence";
 
 export const Router: React.FC = () => {
   const { currentView } = useContext(ViewContext);
@@ -13,8 +15,20 @@ export const Router: React.FC = () => {
     }
     case ViewKind.NodeResidence: {
       const { nodeId } = currentView;
-
-      return <Residence nodeId={nodeId} />;
+      return <ResidenceView nodeId={nodeId} />;
+    }
+    case ViewKind.NodeDungeon:
+    case ViewKind.NodeInstitution:
+    case ViewKind.NodeMarket:
+    case ViewKind.NodeProducer:
+    case ViewKind.NodeService:
+    case ViewKind.NodeWelfare: {
+      const { nodeId } = currentView;
+      return <Empty nodeId={nodeId} />;
+    }
+    case ViewKind.Character: {
+      const { characterId } = currentView;
+      return <Character characterId={characterId} />;
     }
     default:
       throw new Error("Unreachable - unknown view");

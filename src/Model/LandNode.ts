@@ -1,5 +1,10 @@
 import { DynamicClassFactory } from "../utils/DynamicClass";
+import { Farmhouse } from "./Buildings/Farmhouse";
+import { GuildHall } from "./Buildings/GuildHall";
+import { Residence } from "./Buildings/Residence";
+import { Shop } from "./Buildings/Shop";
 import { PlanetCoor } from "./Coor";
+import { Dungeon } from "./Dungeon/Dungeon";
 
 export interface LandNodeData {
   name: string;
@@ -7,11 +12,14 @@ export interface LandNodeData {
   claimedLand: number;
   usedLand: number;
   population: number;
-  farmhouses: Set<number>;
-  guildHalls: Set<number>;
-  dungeons: Set<number>;
-  shops: Set<number>;
   coor: PlanetCoor;
+
+  // buildings
+  farmhouses: Farmhouse[];
+  guildHalls: GuildHall[];
+  dungeons: Dungeon[];
+  shops: Shop[];
+  residences: Residence[];
 }
 
 const BaseClass = DynamicClassFactory<LandNodeData>();
@@ -22,15 +30,15 @@ export class LandNode extends BaseClass {
   }
 
   get hasMarket(): boolean {
-    return this.shops.size > 0;
+    return this.shops.length > 0;
   }
 
   get hasProducers(): boolean {
-    return this.farmhouses.size > 0;
+    return this.farmhouses.length > 0;
   }
 
   get hasDungeons(): boolean {
-    return this.dungeons.size > 0;
+    return this.dungeons.length > 0;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -43,9 +51,8 @@ export class LandNode extends BaseClass {
     return false; // TODO
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get hasResidence(): boolean {
-    return false; // TODO
+    return this.residences.length > 0;
   }
 
   // eslint-disable-next-line class-methods-use-this
