@@ -7,7 +7,7 @@ interface Props {
   nodeId: number;
 }
 
-export const Empty: React.FC<Props> = ({ nodeId }) => {
+export const EmptyView: React.FC<Props> = ({ nodeId }) => {
   const { game } = useContext(GameContext);
 
   const { popView } = useContext(ViewContext);

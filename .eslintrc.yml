@@ -38,7 +38,9 @@ rules:
   "import/no-duplicates": "error"
   "unused-imports/no-unused-imports": "error"
   "@typescript-eslint/member-ordering": "error"
-  "@typescript-eslint/explicit-function-return-type": "error"
+  "@typescript-eslint/explicit-function-return-type":
+    - "error"
+    - "allowExpressions": true
   "react/function-component-definition":
     - "error"
     - "namedComponents": "arrow-function"

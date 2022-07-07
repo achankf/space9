@@ -38,7 +38,7 @@ export class IdMap<T> {
     return [...this.data].map(f);
   }
 
-  reserve(): { id: Id; set(item: T): void } {
+  reserveSlot(): { id: Id; set(item: T): void } {
     const id = this.nextId;
 
     const set = (item: T): void => {

@@ -6,11 +6,12 @@ import { Address } from "./Address";
 import { Farmhouse } from "./Buildings/Farmhouse";
 import { GuildHall } from "./Buildings/GuildHall";
 import { Character } from "./Character";
+import { Coor, CoorKind } from "./Coor";
 import { Dungeon } from "./Dungeon/Dungeon";
 import { Faction } from "./Faction";
 import { Family } from "./Family";
 import { Guild } from "./Guild";
-import { LandNode } from "./LandNode";
+import { LandNode } from "./Node";
 
 export interface GameData {
   characters: IdMap<Character>;
@@ -32,12 +33,14 @@ export interface GameData {
   playerId: number;
 }
 
-const Baseclass = DynamicClassFactory<GameData>();
+const BaseClass = DynamicClassFactory<GameData>();
 
-export class Game extends Baseclass {
+export class Game extends BaseClass {
   getCharacter = this.characters.createGetter("character");
 
   getFamily = this.families.createGetter("family");
+
+  getFaction = this.factions.createGetter("faction");
 
   getAddressByFamilyId = createGetter(this.addresses, "address");
 
@@ -67,5 +70,21 @@ export class Game extends Baseclass {
 
   isPlayer(characterId: Id): boolean {
     return characterId === this.playerId;
+  }
+
+  toCoorString(coor: Coor): string {
+    switch (coor.type) {
+      case CoorKind.Node: {
+        const { nodeId } = coor;
+        const { name } = this.getNode(nodeId);
+        return name;
+      }
+      case CoorKind.Planet: {
+        const { x, y } = coor;
+        return `(${x},${y})`;
+      }
+      default:
+        throw new Error("Unreachable");
+    }
   }
 }

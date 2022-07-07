@@ -1,18 +1,17 @@
 import { Id } from "../Id";
+import { DynamicClassFactory } from "../utils/DynamicClass";
 import { Coor } from "./Coor";
 
-export interface CharacterAttributes {
-  physique: number;
-  intelligence: number;
-  mana: number;
-  social: number;
-  luck: number;
-}
-
-export interface Character {
+export interface CharacterData {
   name: string;
   coor: Coor;
-  attr: CharacterAttributes;
+  attr: {
+    physique: number;
+    intelligence: number;
+    mana: number;
+    social: number;
+    luck: number;
+  };
   education: {
     literacy: number;
   };
@@ -20,3 +19,7 @@ export interface Character {
   stress: number;
   familyId: Id;
 }
+
+const BaseClass = DynamicClassFactory<CharacterData>();
+
+export class Character extends BaseClass {}

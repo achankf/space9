@@ -12,7 +12,7 @@ import { Faction } from "./Model/Faction";
 import { Family } from "./Model/Family";
 import { Game } from "./Model/Game";
 import { Guild } from "./Model/Guild";
-import { LandNode } from "./Model/LandNode";
+import { LandNode } from "./Model/Node";
 import { IdMap } from "./Struct/IdMap";
 import { createUniqueNames } from "./utils/createUniqueName";
 
@@ -24,34 +24,36 @@ export function createGame(): Game {
   const addresses = new Map<Id, Address>();
   const factions = new IdMap<Faction>();
 
-  const { id: faction1, set: setFaction } = factions.reserve();
+  const { id: factionId, set: setFaction } = factions.reserveSlot();
 
   const names = createUniqueNames(10);
 
   const nodeId = landNodes.length;
 
   names.forEach((name) => {
-    const { id: characterId, set: setCharacter } = characters.reserve();
-    const { id: familyId, set: setFamily } = families.reserve();
+    const { id: characterId, set: setCharacter } = characters.reserveSlot();
+    const { id: familyId, set: setFamily } = families.reserveSlot();
 
-    setCharacter({
-      name,
-      coor: {
-        type: CoorKind.Node,
-        nodeId,
-      },
-      attr: {
-        physique: 5,
-        intelligence: 5,
-        mana: 5,
-        social: 5,
-        luck: 5,
-      },
-      actionCapacity: 3,
-      education: { literacy: 10 },
-      stress: 0,
-      familyId,
-    });
+    setCharacter(
+      new Character({
+        name,
+        coor: {
+          type: CoorKind.Node,
+          nodeId,
+        },
+        attr: {
+          physique: 5,
+          intelligence: 5,
+          mana: 5,
+          social: 5,
+          luck: 5,
+        },
+        actionCapacity: 3,
+        education: { literacy: 10 },
+        stress: 0,
+        familyId,
+      })
+    );
 
     setFamily({
       head: characterId,
@@ -78,6 +80,12 @@ export function createGame(): Game {
     });
   });
 
+  setFaction({
+    name: "Oceania",
+    ownedNodes: new Set([nodeId]),
+    capital: nodeId,
+  });
+
   const guilds = new IdMap<Guild>();
 
   landNodes.push(
@@ -93,6 +101,7 @@ export function createGame(): Game {
       dungeons: [],
       shops: [],
       residences,
+      suzerain: factionId,
     })
   );
 

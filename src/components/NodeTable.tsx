@@ -1,18 +1,21 @@
 import { useContext } from "react";
 
 import { GameContext } from "../Context/Game";
-import { ViewContext, ViewContextData, ViewKind } from "../Context/View";
-import { LandNode } from "../Model/LandNode";
+import { ViewContext, ViewKind } from "../Context/View";
 
-function createRows({
-  landNodes,
-  viewContext,
-}: {
-  landNodes: LandNode[];
-  viewContext: ViewContextData;
-}): React.ReactNode {
-  return landNodes.map((node, index) => {
-    const { allUsableLand, name, claimedLand, usedLand, popScale } = node;
+const TableBody: React.FC = () => {
+  const { game } = useContext(GameContext);
+
+  const viewContext = useContext(ViewContext);
+
+  const { landNodes } = game;
+
+  const rows = landNodes.map((node, index) => {
+    const { allUsableLand, name, claimedLand, usedLand, popScale, suzerain } =
+      node;
+
+    const suzerainFaction =
+      suzerain !== undefined ? game.getFaction(suzerain) : undefined;
 
     const nodeId = index;
 
@@ -55,6 +58,7 @@ function createRows({
       <tr key={nodeId}>
         <td>{name}</td>
         <td>{popScale.toFixed(0)}</td>
+        <td>{suzerainFaction?.name ?? "None"}</td>
         <td>{allUsableLand}</td>
         <td>{claimedLand}</td>
         <td>{usedLand}</td>
@@ -96,40 +100,35 @@ function createRows({
       </tr>
     );
   });
-}
 
-export const NodeTable: React.FC = () => {
-  const {
-    game: { landNodes },
-  } = useContext(GameContext);
-
-  const viewContext = useContext(ViewContext);
-
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th colSpan={2}>Demographics</th>
-          <th colSpan={3}>Land (Acre)</th>
-          <th colSpan={5}>Establishment</th>
-          <th colSpan={2}>Cultivation</th>
-        </tr>
-        <tr>
-          <th>Name</th>
-          <th>Pop Scale</th>
-          <th>Usable</th>
-          <th>Claimed</th>
-          <th>Used</th>
-          <th>Residence</th>
-          <th>Market</th>
-          <th>Welfare</th>
-          <th>Service</th>
-          <th>Producer</th>
-          <th>Dungeon</th>
-          <th>Institution</th>
-        </tr>
-      </thead>
-      <tbody>{createRows({ viewContext, landNodes })}</tbody>
-    </table>
-  );
+  return <tbody>{rows}</tbody>;
 };
+
+export const NodeTable: React.FC = () => (
+  <table>
+    <thead>
+      <tr>
+        <th colSpan={3}>Demographics</th>
+        <th colSpan={3}>Land (Acre)</th>
+        <th colSpan={5}>Establishment</th>
+        <th colSpan={2}>Cultivation</th>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <th>Pop Scale</th>
+        <th>Allegiance</th>
+        <th>Usable</th>
+        <th>Claimed</th>
+        <th>Used</th>
+        <th>Residence</th>
+        <th>Market</th>
+        <th>Welfare</th>
+        <th>Service</th>
+        <th>Producer</th>
+        <th>Dungeon</th>
+        <th>Institution</th>
+      </tr>
+    </thead>
+    <TableBody />
+  </table>
+);

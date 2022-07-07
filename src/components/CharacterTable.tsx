@@ -2,12 +2,10 @@ import React, { useContext } from "react";
 
 import { GameContext } from "../Context/Game";
 import { ViewContext, ViewKind } from "../Context/View";
-import { coorToString } from "../Model/Coor";
 
 export const CharacterTable: React.FC = () => {
-  const {
-    game: { characters },
-  } = useContext(GameContext);
+  const { game } = useContext(GameContext);
+  const { characters } = game;
 
   const { pushView } = useContext(ViewContext);
 
@@ -42,7 +40,7 @@ export const CharacterTable: React.FC = () => {
             <tr
               className="clickable"
               key={id}
-              onClick={(): void =>
+              onClick={() =>
                 pushView({ type: ViewKind.Character, characterId: id })
               }
             >
@@ -55,7 +53,7 @@ export const CharacterTable: React.FC = () => {
               <td>{social}</td>
               <td>{luck}</td>
               <td>{attrSum}</td>
-              <td>{coorToString(coor)}</td>
+              <td>{game.toCoorString(coor)}</td>
             </tr>
           );
         })}
