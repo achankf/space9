@@ -1,7 +1,19 @@
 import { Id } from "../Id";
 
-export interface Faction {
+interface BankAccount {}
+
+interface FactionData {
   name: string;
   ownedNodes: Set<Id>;
   capital: Id;
+
+  currency: Id;
+}
+
+export interface Faction extends FactionData {}
+
+export class Faction {
+  constructor(data: FactionData) {
+    Object.assign(this, data);
+  }
 }

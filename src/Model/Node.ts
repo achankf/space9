@@ -1,7 +1,6 @@
 import clamp from "lodash/clamp";
 
 import { Id } from "../Id";
-import { DynamicClassFactory } from "../utils/DynamicClass";
 import { Farmhouse } from "./Buildings/Farmhouse";
 import { GuildHall } from "./Buildings/GuildHall";
 import { Residence } from "./Buildings/Residence";
@@ -31,7 +30,7 @@ interface Contract {
   fee: Fee;
 }
 
-export interface LandNodeData {
+interface LandNodeData {
   name: string;
   allUsableLand: number;
   claimedLand: number;
@@ -49,9 +48,13 @@ export interface LandNodeData {
   residences: Residence[];
 }
 
-const BaseClass = DynamicClassFactory<LandNodeData>();
+export interface LandNode extends LandNodeData {}
 
-export class LandNode extends BaseClass {
+export class LandNode {
+  constructor(data: LandNodeData) {
+    Object.assign(this, data);
+  }
+
   get popScale(): number {
     return Math.log10(this.population);
   }

@@ -1,8 +1,7 @@
 import { Id } from "../Id";
-import { DynamicClassFactory } from "../utils/DynamicClass";
 import { Coor } from "./Coor";
 
-export interface CharacterData {
+interface CharacterData {
   name: string;
   coor: Coor;
   attr: {
@@ -20,6 +19,10 @@ export interface CharacterData {
   familyId: Id;
 }
 
-const BaseClass = DynamicClassFactory<CharacterData>();
+export interface Character extends CharacterData {}
 
-export class Character extends BaseClass {}
+export class Character {
+  constructor(data: CharacterData) {
+    Object.assign(this, data);
+  }
+}

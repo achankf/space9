@@ -1,5 +1,5 @@
 import { Id } from "../Id";
-import { createGetter } from "../utils/createGetter";
+import { mustGet } from "../utils/mustGet";
 
 export class IdMap<T> {
   data = new Map<Id, T>();
@@ -16,10 +16,6 @@ export class IdMap<T> {
     return this.data.size;
   }
 
-  createGetter(what: string): (id: Id) => T {
-    return createGetter(this, what);
-  }
-
   put(value: T): Id {
     const { nextId, data } = this;
     data.set(nextId, value);
@@ -28,6 +24,10 @@ export class IdMap<T> {
 
   get(key: Id): T | undefined {
     return this.data.get(key);
+  }
+
+  mustGet(key: Id): T {
+    return mustGet(this, key);
   }
 
   entries(): IterableIterator<[Id, T]> {

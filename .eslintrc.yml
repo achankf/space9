@@ -43,3 +43,4 @@ rules:
   "import/prefer-default-export": "off"
   "import/no-default-export": "error"
   "jsx-a11y/control-has-associated-label": "off"
+  "no-restricted-syntax": "off" # turning it off allows for-of loops

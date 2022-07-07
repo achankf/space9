@@ -7,6 +7,7 @@ import { GuildHall } from "./Model/Buildings/GuildHall";
 import { Residence, ResidenceKind } from "./Model/Buildings/Residence";
 import { Character } from "./Model/Character";
 import { CoorKind } from "./Model/Coor";
+import { Currency, CurrencyKind, SovereignCurrency } from "./Model/Currency";
 import { Dungeon } from "./Model/Dungeon/Dungeon";
 import { Faction } from "./Model/Faction";
 import { Family } from "./Model/Family";
@@ -23,8 +24,10 @@ export function createGame(): Game {
   const residences = Array<Residence>();
   const addresses = new Map<Id, Address>();
   const factions = new IdMap<Faction>();
+  const currencies = new IdMap<Currency>();
 
   const { id: factionId, set: setFaction } = factions.reserveSlot();
+  const { id: currencyId, set: setCurrency } = currencies.reserveSlot();
 
   const names = createUniqueNames(10);
 
@@ -80,11 +83,22 @@ export function createGame(): Game {
     });
   });
 
-  setFaction({
-    name: "Oceania",
-    ownedNodes: new Set([nodeId]),
-    capital: nodeId,
-  });
+  setCurrency(
+    new SovereignCurrency({
+      type: CurrencyKind.Sovereign,
+      owner: factionId,
+      name: "Dollar",
+    })
+  );
+
+  setFaction(
+    new Faction({
+      name: "Oceania",
+      ownedNodes: new Set([nodeId]),
+      capital: nodeId,
+      currency: currencyId,
+    })
+  );
 
   const guilds = new IdMap<Guild>();
 
@@ -108,6 +122,7 @@ export function createGame(): Game {
   return new Game({
     addresses,
     characters,
+    currencies,
     guilds,
     families,
     landNodes,
