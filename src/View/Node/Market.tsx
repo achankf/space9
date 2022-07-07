@@ -18,14 +18,15 @@ export const MarketView: React.FC<Props> = ({ nodeId }) => {
 
   const rows = Object.entries(INVISIBLE_HAND).map(([key, { name, type }]) => {
     const price = node.getPrice(type);
-    const producerDemand = node.getDemand(type);
-    const producerSupply = node.getSupply(type);
 
-    const popDemand = node.getDemand(type);
-    const popSupply = node.getSupply(type);
+    const producerDemand = node.getProducerDemand(type);
+    const popDemand = node.getPopDemand(type);
+
+    const wholesaleSupply = node.getWholesaleSupply(type);
+    const retailSupply = node.getRetailSupply(type);
 
     const totalDemand = producerDemand + popDemand;
-    const totalSupply = producerSupply + popSupply;
+    const totalSupply = wholesaleSupply + retailSupply;
 
     return (
       <tr key={key}>
@@ -34,8 +35,8 @@ export const MarketView: React.FC<Props> = ({ nodeId }) => {
         <td>{producerDemand}</td>
         <td>{popDemand}</td>
         <td>{totalDemand}</td>
-        <td>{producerSupply}</td>
-        <td>{popSupply}</td>
+        <td>{wholesaleSupply}</td>
+        <td>{retailSupply}</td>
         <td>{totalSupply}</td>
       </tr>
     );
@@ -57,8 +58,8 @@ export const MarketView: React.FC<Props> = ({ nodeId }) => {
             <th>Producer</th>
             <th>Pop</th>
             <th>Total</th>
-            <th>Producer</th>
-            <th>Pop</th>
+            <th>Wholesale</th>
+            <th>Retail</th>
             <th>Total</th>
           </tr>
         </thead>

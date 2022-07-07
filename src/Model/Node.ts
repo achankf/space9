@@ -88,19 +88,29 @@ export class LandNode extends BaseClass {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getDemand(commodity: Commodity): number {
+  getProducerDemand(commodity: Commodity): number {
     return 100;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getSupply(commodity: Commodity): number {
+  getPopDemand(commodity: Commodity): number {
+    return 100;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getWholesaleSupply(commodity: Commodity): number {
+    return 100;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getRetailSupply(commodity: Commodity): number {
     return 100;
   }
 
   // eslint-disable-next-line class-methods-use-this
   getPerceivedValue(commodity: Commodity): number {
-    const demand = this.getDemand(commodity);
-    const supply = this.getSupply(commodity);
+    const demand = this.getProducerDemand(commodity);
+    const supply = this.getWholesaleSupply(commodity);
     const { intrinsicValue, elasticity } = INVISIBLE_HAND[commodity];
 
     const minValue = 1;
