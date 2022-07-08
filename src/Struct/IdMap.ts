@@ -26,6 +26,9 @@ export class IdMap<T> {
     return this.data.get(key);
   }
 
+  /*
+   * Either you get the item, or this function throws an error that you shouldn't catch
+   */
   mustGet(key: Id): T {
     return mustGet(this, key);
   }

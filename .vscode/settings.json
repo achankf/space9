@@ -7,10 +7,10 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": true
-  },
+  "editor.codeActionsOnSave": [
+    "source.organizeImports", // order is important, since this step removes trailing commas from imports
+    "source.fixAll"
+  ],
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },

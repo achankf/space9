@@ -6,7 +6,7 @@ import { Farmhouse } from "./Buildings/Farmhouse";
 import { GuildHall } from "./Buildings/GuildHall";
 import { Character } from "./Character";
 import { Coor, CoorKind } from "./Coor";
-import { Currency } from "./Currency";
+import { Currency } from "./Currency/Currency";
 import { Dungeon } from "./Dungeon/Dungeon";
 import { Faction } from "./Faction";
 import { Family } from "./Family";

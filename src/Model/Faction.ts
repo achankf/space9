@@ -1,12 +1,9 @@
 import { Id } from "../Id";
 
-interface BankAccount {}
-
 interface FactionData {
   name: string;
   ownedNodes: Set<Id>;
   capital: Id;
-
   currency: Id;
 }
 

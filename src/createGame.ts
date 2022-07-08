@@ -7,13 +7,13 @@ import { GuildHall } from "./Model/Buildings/GuildHall";
 import { Residence, ResidenceKind } from "./Model/Buildings/Residence";
 import { Character } from "./Model/Character";
 import { CoorKind } from "./Model/Coor";
-import { Currency, CurrencyKind, SovereignCurrency } from "./Model/Currency";
+import { Currency } from "./Model/Currency/Currency";
 import { Dungeon } from "./Model/Dungeon/Dungeon";
 import { Faction } from "./Model/Faction";
 import { Family } from "./Model/Family";
 import { Game } from "./Model/Game";
 import { Guild } from "./Model/Guild";
-import { LandNode } from "./Model/Node";
+import { LandNode as Node } from "./Model/Node";
 import { IdMap } from "./Struct/IdMap";
 import { createUniqueNames } from "./utils/createUniqueName";
 
@@ -84,10 +84,14 @@ export function createGame(): Game {
   });
 
   setCurrency(
-    new SovereignCurrency({
-      type: CurrencyKind.Sovereign,
-      owner: factionId,
+    new Currency({
+      controller: factionId,
       name: "Dollar",
+      holders: {
+        personal: new Map(),
+        corporate: new Map(),
+        government: new Map(),
+      },
     })
   );
 
@@ -103,7 +107,7 @@ export function createGame(): Game {
   const guilds = new IdMap<Guild>();
 
   landNodes.push(
-    new LandNode({
+    new Node({
       name: "Airstrip One",
       coor: { type: CoorKind.Planet, x: 2, y: 3 },
       allUsableLand: random(6000, 15000),

@@ -1,5 +1,6 @@
-import { Id } from "../Id";
-import { sum } from "../utils/sum";
+import { Id } from "../../Id";
+import { sum } from "../../utils/sum";
+import { isSameShareHolder, ShareHolder, ShareHolderKind } from "./ShareHolder";
 
 type ShareHolderMap = Map<Id, number>;
 
@@ -12,46 +13,6 @@ interface CorporationData {
   };
   hqNodeId: Id;
   isPublic: boolean;
-}
-
-enum ShareHolderKind {
-  Personal,
-  Corporate,
-  Government,
-  Minor,
-}
-
-interface PersonalShareHolder {
-  type: ShareHolderKind.Personal;
-  id: Id;
-}
-
-interface CorporateShareHolder {
-  type: ShareHolderKind.Corporate;
-  id: Id;
-}
-
-interface GovernementShareHolder {
-  type: ShareHolderKind.Government;
-  id: Id;
-}
-
-interface MinorShareHolder {
-  type: ShareHolderKind.Minor;
-}
-
-type ShareHolder =
-  | PersonalShareHolder
-  | CorporateShareHolder
-  | GovernementShareHolder
-  | MinorShareHolder;
-
-function isSameShareHolder(a: ShareHolder, b: ShareHolder): boolean {
-  if (a.type === ShareHolderKind.Minor || b.type === ShareHolderKind.Minor) {
-    return a.type === b.type;
-  }
-
-  return a.type === b.type && a.id === b.id;
 }
 
 export interface Corporation extends CorporationData {}
@@ -77,7 +38,7 @@ export class Corporation {
     return sum(this.ownership.government.values());
   }
 
-  get totalNonMinorOnwership(): number {
+  get totalNonMassOnwership(): number {
     return (
       this.totalCorporateOwnership +
       this.totalPersonalOwnership +
@@ -85,20 +46,20 @@ export class Corporation {
     );
   }
 
-  get totalMinorOwnership(): number {
-    return this.issuedShares - this.totalNonMinorOnwership;
+  get totalMassOwnership(): number {
+    return this.issuedShares - this.totalNonMassOnwership;
   }
 
   getShares(shareHolder: ShareHolder): number {
     const { type } = shareHolder;
 
-    if (type !== ShareHolderKind.Minor) {
+    if (type !== ShareHolderKind.Mass) {
       const { id } = shareHolder;
       const map = this.#getShareMap(type);
       return map.get(id) ?? 0;
     }
 
-    return this.totalMinorOwnership;
+    return this.totalMassOwnership;
   }
 
   #getShareMap(type: ShareHolderKind): ShareHolderMap {
@@ -133,9 +94,9 @@ export class Corporation {
       throw new Error("Unreachable - no change");
     }
 
-    if (type === ShareHolderKind.Minor) {
+    if (type === ShareHolderKind.Mass) {
       throw new Error(
-        "Unreachable - cannot change minor shareholder amount since it's a derived value"
+        "Unreachable - cannot change mass shareholders' share amount since it's a derived value"
       );
     }
 
